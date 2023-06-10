@@ -19321,7 +19321,7 @@ function streamToBlob(stream) {
     stream.on('data', (chunk) => {
         chunks.push(chunk);
     });
-    return new Blob(chunks);
+    return Buffer.concat(chunks);
 }
 function triggerWebhook(webhook, url) {
     return __awaiter(this, void 0, void 0, function* () {

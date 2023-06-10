@@ -82,7 +82,7 @@ function streamToBlob(stream : Stream) {
     stream.on('data', (chunk) => {
       chunks.push(chunk);
     });
-    return new Blob(chunks)
+    return Buffer.concat(chunks)
 }
 
 async function triggerWebhook(webhook : WebhookType, url : string) {
