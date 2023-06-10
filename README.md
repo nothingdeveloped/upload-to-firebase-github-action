@@ -69,7 +69,7 @@ In Github:
 
 # Options
 - **FireBase Config** (required) : 
-     ```javascript
+ ```javascript
 apiKey: string;
 authDomain: string;
 projectId: string;
