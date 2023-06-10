@@ -1,0 +1,29 @@
+name: 'Upload To Firebase'
+description: 'Upload To Firebase Storage and add Webhook'
+author: 'notdev'
+branding:
+  icon: arrow-right-circle
+  color: gray-dark
+inputs:
+  firebase_metadata:
+    description : Firebase Metadata to Upload
+    required : true
+  firebase_config:
+    description: Firebase Configuration to use.
+    required: true
+  file_form:
+    description: Files to be transferred,such as 'file','image' etc.
+    required: true
+  webhook:
+    description: Webhook event
+
+outputs:
+  webhook:
+    description: Events occured during triggering of webhook
+  file:
+    description: Events occured during file upload to firebase
+  hash:
+    description: Value to configure against webhook attack
+runs:
+  using: 'node12'
+  main: 'dist/index.js'
