@@ -1,4 +1,4 @@
-import core from '@actions/core';
+import * as core from '@actions/core';
 import axios, { AxiosRequestConfig } from 'axios';
 import firebase from "firebase/compat/app";
 import "firebase/compat/storage";
@@ -31,7 +31,7 @@ async function initFirebases(inputs : UploadInputs)  {
   
   return await new Promise( (res,rej) => { 
     const app = firebase.initializeApp(firebaseConfig)
-    var storageRef = firebase.app().storage(firebaseConfig.storageBucket).ref(path);
+    var storageRef = firebase.app().storage(firebaseConfig.storageBucket).ref();
     const readStream = createReadStream(fileForm.file)
     const blob = streamToBlob(readStream)
 

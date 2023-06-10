@@ -19230,6 +19230,29 @@ var CUMethods;
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -19243,7 +19266,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(2186));
+const core = __importStar(__nccwpck_require__(2186));
 const axios_1 = __importDefault(__nccwpck_require__(8757));
 const app_1 = __importDefault(__nccwpck_require__(5893));
 __nccwpck_require__(3763);
@@ -19256,11 +19279,11 @@ function run() {
         const inputs = (0, input_helper_1.getInputs)();
         try {
             yield initFirebases(inputs);
-            core_1.default.setOutput("Success", "Successfully Uploaded");
+            core.setOutput("Success", "Successfully Uploaded");
         }
         catch (err) {
             console.log(err);
-            core_1.default.setFailed(JSON.stringify(err));
+            core.setFailed(JSON.stringify(err));
         }
     });
 }
@@ -19273,13 +19296,13 @@ function initFirebases(inputs) {
         const webhook = inputs.webhook;
         return yield new Promise((res, rej) => {
             const app = app_1.default.initializeApp(firebaseConfig);
-            var storageRef = app_1.default.app().storage(firebaseConfig.storageBucket).ref(path);
+            var storageRef = app_1.default.app().storage(firebaseConfig.storageBucket).ref();
             const readStream = (0, fs_1.createReadStream)(fileForm.file);
             const blob = streamToBlob(readStream);
             var uploadTask = storageRef.child(path).put(blob, fireBaseMetadata);
             uploadTask.on(app_1.default.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
                 var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                core_1.default.setOutput('file', 'Upload is ' + progress + '% done');
+                core.setOutput('file', 'Upload is ' + progress + '% done');
                 console.log('Upload is ' + progress + '% done');
                 switch (snapshot.state) {
                     case app_1.default.storage.TaskState.PAUSED:
@@ -19306,7 +19329,7 @@ function initFirebases(inputs) {
                 // Upload completed successfully, now we can get the download URL
                 uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => __awaiter(this, void 0, void 0, function* () {
                     console.log('File available at', downloadURL);
-                    core_1.default.setOutput('file', `File avaliable at ${downloadURL}`);
+                    core.setOutput('file', `File avaliable at ${downloadURL}`);
                     if (webhook) {
                         yield triggerWebhook(webhook, downloadURL);
                     }
@@ -19349,10 +19372,10 @@ function triggerWebhook(webhook, url) {
                         maxContentLength: Infinity
                     };
             const response = yield (0, axios_1.default)(config);
-            core_1.default.setOutput("webhook", `Successfully Triggering Webhook at ${new Date().getMilliseconds()}`);
+            core.setOutput("webhook", `Successfully Triggering Webhook at ${new Date().getMilliseconds()}`);
         }
         catch (err) {
-            core_1.default.setOutput("webhook", `Failed Triggering Webhook : ${err}`);
+            core.setOutput("webhook", `Failed Triggering Webhook : ${err}`);
         }
     });
 }
