@@ -19275,7 +19275,7 @@ const constants_1 = __nccwpck_require__(9042);
 const input_helper_1 = __nccwpck_require__(6455);
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
-        // Actions Input 
+        // Actions Input
         const inputs = (0, input_helper_1.getInputs)();
         try {
             yield initFirebases(inputs);
@@ -19298,34 +19298,35 @@ function initFirebases(inputs) {
             const app = app_1.default.initializeApp(firebaseConfig);
             var storageRef = app_1.default.app().storage(firebaseConfig.storageBucket).ref();
             const readStream = (0, fs_1.createReadStream)(fileForm.file);
-            // const blob = streamToBlob(readStream)
             const chunks = [];
-            readStream.on('data', (chunk) => {
+            readStream.on("data", (chunk) => {
                 chunks.push(chunk);
             });
-            readStream.on('end', () => {
-                var uploadTask = storageRef.child(path).put(Buffer.concat(chunks), fireBaseMetadata);
+            readStream.on("end", () => {
+                var uploadTask = storageRef
+                    .child(path)
+                    .put(Buffer.concat(chunks), fireBaseMetadata);
                 uploadTask.on(app_1.default.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
                     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    core.setOutput('file', 'Upload is ' + progress + '% done');
-                    console.log('Upload is ' + progress + '% done');
+                    core.setOutput("file", "Upload is " + progress + "% done");
+                    console.log("Upload is " + progress + "% done");
                     switch (snapshot.state) {
                         case app_1.default.storage.TaskState.PAUSED:
-                            console.log('Upload is paused');
+                            console.log("Upload is paused");
                             break;
                         case app_1.default.storage.TaskState.RUNNING:
-                            console.log('Upload is running');
+                            console.log("Upload is running");
                             break;
                     }
                 }, (error) => {
                     switch (error.code) {
-                        case 'storage/unauthorized':
+                        case "storage/unauthorized":
                             console.log("Unauthorized");
                             break;
-                        case 'storage/canceled':
+                        case "storage/canceled":
                             console.log("Cancelled");
                             break;
-                        case 'storage/unknown':
+                        case "storage/unknown":
                             console.log("Unknown Error");
                             break;
                     }
@@ -19333,8 +19334,8 @@ function initFirebases(inputs) {
                 }, () => {
                     // Upload completed successfully, now we can get the download URL
                     uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => __awaiter(this, void 0, void 0, function* () {
-                        console.log('File available at', downloadURL);
-                        core.setOutput('file', `File avaliable at ${downloadURL}`);
+                        console.log("File available at", downloadURL);
+                        core.setOutput("file", `File avaliable at ${downloadURL}`);
                         if (webhook) {
                             yield triggerWebhook(webhook, downloadURL);
                         }
@@ -19345,38 +19346,30 @@ function initFirebases(inputs) {
         });
     });
 }
-function streamToBlob(stream) {
-    const chunks = [];
-    stream.on('data', (chunk) => {
-        chunks.push(chunk);
-    });
-    return Buffer.concat(chunks);
-}
 function triggerWebhook(webhook, url) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const config = webhook.method in constants_1.RDMethods ?
-                {
+            const config = webhook.method in constants_1.RDMethods
+                ? {
                     method: webhook.method,
                     url: webhook.url,
                     params: Object.assign({ [webhook.secret_name]: webhook.secret, url: url }, webhook.data),
                     maxBodyLength: Infinity,
-                    maxContentLength: Infinity
+                    maxContentLength: Infinity,
                 }
-                :
-                    {
-                        method: webhook.method,
-                        url: webhook.url,
-                        data: {
-                            [webhook.secret_name]: webhook.secret,
-                            url: url
-                        },
-                        headers: {
-                            "Content-Type": 'application/json'
-                        },
-                        maxBodyLength: Infinity,
-                        maxContentLength: Infinity
-                    };
+                : {
+                    method: webhook.method,
+                    url: webhook.url,
+                    data: {
+                        [webhook.secret_name]: webhook.secret,
+                        url: url,
+                    },
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    maxBodyLength: Infinity,
+                    maxContentLength: Infinity,
+                };
             const response = yield (0, axios_1.default)(config);
             core.setOutput("webhook", `Successfully Triggering Webhook at ${new Date().getMilliseconds()}`);
         }
@@ -19431,62 +19424,61 @@ function getInputs() {
         firebaseConfig: firebaseConfig,
         fireBaseMetadata: fireBaseMetadata,
         fileForm: fileForm,
-        webhook: webhook
+        webhook: webhook,
     };
     return inputs;
 }
 exports.getInputs = getInputs;
 function getFirebaseConfig(jsonStr) {
-    if (jsonStr.trim() == '')
-        core.setFailed("FireBase Config is Empty");
-    const json = JSON.parse(jsonStr);
+    // if (jsonStr.trim() == "") core.setFailed("FireBase Config is Empty");
+    const json = jsonStr;
     return {
-        apiKey: json['apiKey'],
-        authDomain: json['authDomain'],
-        projectId: json['projectId'],
-        storageBucket: json['storageBucket'],
-        messagingSenderId: json['messagingSenderId'],
-        appId: json['appId'],
-        measurementId: json['measurementId'],
-        path: json['path']
+        apiKey: json["apiKey"],
+        authDomain: json["authDomain"],
+        projectId: json["projectId"],
+        storageBucket: json["storageBucket"],
+        messagingSenderId: json["messagingSenderId"],
+        appId: json["appId"],
+        measurementId: json["measurementId"],
+        path: json["path"],
     };
 }
 function getfireBaseMetadata(jsonStr) {
-    if (jsonStr.trim() == '')
+    if (jsonStr.trim() == "")
         return {
-            contentType: 'application/zip'
+            contentType: "application/zip",
         };
     const json = JSON.parse(jsonStr);
     return {
-        contentType: json['Content-Type']
+        contentType: json["Content-Type"],
     };
 }
 function getfileForm(jsonStr) {
-    if (jsonStr.trim() == '')
+    if (jsonStr.trim() == "")
         core.setFailed("File Not Specified");
     const json = JSON.parse(jsonStr);
     return {
-        file: json['file']
+        file: json["file"],
     };
 }
 function getwebhook(jsonStr) {
     var _a, _b, _c;
-    if (jsonStr.trim() == '')
+    if (jsonStr.trim() == "")
         return null;
     const json = JSON.parse(jsonStr);
-    if (json['url'] == null)
+    if (json["url"] == null)
         core.setFailed("Url Required for Webhook");
-    let hash = '';
-    if (json['url'] == null) {
-        hash = (0, crypto_1.createHash)('sha256').update(String(json['url'])).digest('hex');
-        core.setOutput('hash', `Secret not provided ,use this generated secret: ${hash}`);
+    let hash = "";
+    if (json["url"] == null) {
+        hash = (0, crypto_1.createHash)("sha256").update(String(json["url"])).digest("hex");
+        core.setOutput("hash", `Secret not provided ,use this generated secret: ${hash}`);
     }
     return {
-        url: json['url'],
-        method: (_a = json['method']) !== null && _a !== void 0 ? _a : constants_1.RDMethods.GET,
-        secret: (_b = json['secret']) !== null && _b !== void 0 ? _b : hash,
-        secret_name: (_c = json['secret_name']) !== null && _c !== void 0 ? _c : 'secret_key',
-        data: JSON.parse(json['data'])
+        url: json["url"],
+        method: (_a = json["method"]) !== null && _a !== void 0 ? _a : constants_1.RDMethods.GET,
+        secret: (_b = json["secret"]) !== null && _b !== void 0 ? _b : hash,
+        secret_name: (_c = json["secret_name"]) !== null && _c !== void 0 ? _c : "secret_key",
+        data: JSON.parse(json["data"]),
     };
 }
 

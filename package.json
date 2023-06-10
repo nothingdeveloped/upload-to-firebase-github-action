@@ -1,4 +1,7 @@
 {
+  "name": "upload-to-firebase",
+  "version": "1.0.0",
+  "description": "Upload a file to firebase and trigger a webhook",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
@@ -9,6 +12,23 @@
     "lint": "eslint **/*.ts",
     "test": "jest --testTimeout 10000"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nothingdeveloped/upload-to-firebase.git"
+  },
+  "keywords": [
+    "Actions",
+    "GitHub",
+    "Firebase Upload",
+    "Firebase",
+    "Upload to Firebase"
+  ],
+  "author": "NOThingDEVeloped",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nothingdeveloped/upload-to-firebase/issues"
+  },
+  "homepage": "https://github.com/nothingdeveloped/upload-to-firebase#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
     "asyncawait": "^3.0.0",
