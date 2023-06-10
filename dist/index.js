@@ -19298,43 +19298,49 @@ function initFirebases(inputs) {
             const app = app_1.default.initializeApp(firebaseConfig);
             var storageRef = app_1.default.app().storage(firebaseConfig.storageBucket).ref();
             const readStream = (0, fs_1.createReadStream)(fileForm.file);
-            const blob = streamToBlob(readStream);
-            var uploadTask = storageRef.child(path).put(blob, fireBaseMetadata);
-            uploadTask.on(app_1.default.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-                var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                core.setOutput('file', 'Upload is ' + progress + '% done');
-                console.log('Upload is ' + progress + '% done');
-                switch (snapshot.state) {
-                    case app_1.default.storage.TaskState.PAUSED:
-                        console.log('Upload is paused');
-                        break;
-                    case app_1.default.storage.TaskState.RUNNING:
-                        console.log('Upload is running');
-                        break;
-                }
-            }, (error) => {
-                switch (error.code) {
-                    case 'storage/unauthorized':
-                        console.log("Unauthorized");
-                        break;
-                    case 'storage/canceled':
-                        console.log("Cancelled");
-                        break;
-                    case 'storage/unknown':
-                        console.log("Unknown Error");
-                        break;
-                }
-                rej(error);
-            }, () => {
-                // Upload completed successfully, now we can get the download URL
-                uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => __awaiter(this, void 0, void 0, function* () {
-                    console.log('File available at', downloadURL);
-                    core.setOutput('file', `File avaliable at ${downloadURL}`);
-                    if (webhook) {
-                        yield triggerWebhook(webhook, downloadURL);
+            // const blob = streamToBlob(readStream)
+            const chunks = [];
+            readStream.on('data', (chunk) => {
+                chunks.push(chunk);
+            });
+            readStream.on('end', () => {
+                var uploadTask = storageRef.child(path).put(Buffer.concat(chunks), fireBaseMetadata);
+                uploadTask.on(app_1.default.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+                    var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    core.setOutput('file', 'Upload is ' + progress + '% done');
+                    console.log('Upload is ' + progress + '% done');
+                    switch (snapshot.state) {
+                        case app_1.default.storage.TaskState.PAUSED:
+                            console.log('Upload is paused');
+                            break;
+                        case app_1.default.storage.TaskState.RUNNING:
+                            console.log('Upload is running');
+                            break;
                     }
-                    res(downloadURL);
-                }));
+                }, (error) => {
+                    switch (error.code) {
+                        case 'storage/unauthorized':
+                            console.log("Unauthorized");
+                            break;
+                        case 'storage/canceled':
+                            console.log("Cancelled");
+                            break;
+                        case 'storage/unknown':
+                            console.log("Unknown Error");
+                            break;
+                    }
+                    rej(error);
+                }, () => {
+                    // Upload completed successfully, now we can get the download URL
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => __awaiter(this, void 0, void 0, function* () {
+                        console.log('File available at', downloadURL);
+                        core.setOutput('file', `File avaliable at ${downloadURL}`);
+                        if (webhook) {
+                            yield triggerWebhook(webhook, downloadURL);
+                        }
+                        res(downloadURL);
+                    }));
+                });
             });
         });
     });

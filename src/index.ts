@@ -33,9 +33,14 @@ async function initFirebases(inputs : UploadInputs)  {
     const app = firebase.initializeApp(firebaseConfig)
     var storageRef = firebase.app().storage(firebaseConfig.storageBucket).ref();
     const readStream = createReadStream(fileForm.file)
-    const blob = streamToBlob(readStream)
+    // const blob = streamToBlob(readStream)
+    const chunks : Array<any> = [];
+    readStream.on('data', (chunk) => {
+      chunks.push(chunk);
+    });
 
-    var uploadTask = storageRef.child(path).put(blob,fireBaseMetadata);
+    readStream.on('end', () => {
+    var uploadTask = storageRef.child(path).put(Buffer.concat(chunks),fireBaseMetadata);
     uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED,(snapshot) => {
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         core.setOutput('file','Upload is ' + progress + '% done');
@@ -74,6 +79,7 @@ async function initFirebases(inputs : UploadInputs)  {
               res(downloadURL)
           });
       });
+    });
   });
 }
 
