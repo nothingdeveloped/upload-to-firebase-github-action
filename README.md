@@ -1,13 +1,7 @@
 ### What it does
  Uploads a file to firebase cloud storage and trigger a webhook.
 
-**Table of Contents**
-
-[TOCM]
-
-[TOC]
-
-#Installation
+# Installation
 **Using the actions in workflow**
 ```yaml
     - uses: nothingdeveloped/upload-to-firebase-github-action@master 
@@ -34,7 +28,6 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
-    
     - name: Cache Flutter dependencies
       uses: actions/cache@v1
       with:
@@ -46,13 +39,11 @@ jobs:
         flutter-version: '3.7.10' 
     - run: flutter pub get
     - run: flutter build apk
-	
     - uses: actions/upload-artifact@v3
       with:
         name: release-apk
         path: build/app/outputs/apk/release/app-release.apk
         retention-days: 1
-		
     - uses: nothingdeveloped/upload-to-firebase-github-action@master 
       with:
        firebase_metadata: '{ "Content-Type": "application/zip" }'
@@ -60,7 +51,7 @@ jobs:
        firebase_config: '{{SECRETS.FIREBASE_CONFIG}}'
 ```
 
-#Configuration
+# Configuration
 First, Configure the firebase config in the secrets to avoid exposing credentials (firebase config keys) in code base.
 1. Goto [firebase console](https://console.firebase.google.com/ "firebase console")
 2. Select the project and goto Project Settings -> General -> Scroll to "Your App" -> In "SDK setup and configuration" section select config and copy the code.
@@ -76,7 +67,7 @@ In Github:
 ![](https://nothingdeveloped.github.io/assets/github_action_secret.png)
 
 
-#Options
+# Options
 - **FireBase Config** (required) : 
      ```javascript
 apiKey: string;
