@@ -1,5 +1,5 @@
 ### What it does
- Uploads a file to firebase cloud storage and trigger a webhook.
+ Uploads a file to firebase cloud storage and triggers a webhook.
 
 # Installation
 **Using the actions in workflow**
@@ -57,7 +57,7 @@ First, Configure the firebase config in the secrets to avoid exposing credential
 2. Select the project and goto Project Settings -> General -> Scroll to "Your App" -> In "SDK setup and configuration" section select config and copy the code.
 3. Create a secret in Github and paste the config.
 
-**Sample : **
+** Sample : ** \
 In FireBase Console: 
 
 ![](https://nothingdeveloped.github.io/assets/firebase_config.png)
@@ -79,25 +79,24 @@ appId: string;
 measurementId: string;
 path: string;
 ```
-1-7 -> Others are default firebase config 
-8 -> path : Path to upload the firebase cloud storage
+&emsp;path : Path to upload the firebase cloud storage \
+&emsp;Others are default firebase config 
 
 ![](https://nothingdeveloped.github.io/assets/firebase_cloud_storage.png)
 
-
-- **FireBase MetaData **(optional)
+- **FireBase MetaData** (optional) :
 ```javascript
   contentType: string;
 ```
-1.contentType : Content Tye for uploaded file . Default : 'application/zip'
+&emsp;contentType : Content Type for file to be uploaded. Default : 'application/zip'
 
-- ** FileForm** (required)
+- **FileForm** (required):
 ```javascript
   file: string;
 ```
-1.file : File path of the file to be uploaded ( file path in the artifact )
+&emsp;file : Path of the file to be uploaded ( file path in the artifact )
 
-- **Webhook** (optional)
+- **Webhook** (optional):
 ```javascript
   url: string (GET,PUT,POST,DELETE);
   method: string;
@@ -105,11 +104,11 @@ path: string;
   secret_name: string;
   data: {};
 ```
-url : Url of the website
-method : Http Method
-secret : Webhook secret to verify request is made from this action . default : sha256 of url
-secret_name : Name of webhook secret key . default : secret_key
-data : Additional data that can be passed.
+&emsp;url : Url of the website \
+&emsp;method : Http Method \
+&emsp;secret : Webhook secret to verify request is made from this action . default : sha256 of url \
+&emsp;secret_name : Name of webhook secret key . default : secret_key \
+&emsp;data : Additional data that can be passed. 
 
 
 
