@@ -19435,6 +19435,10 @@ function getFirebaseConfig(jsonStr) {
         core.setFailed("FireBase Config is Empty");
     const json = JSON.parse(JSON.stringify(jsonStr));
     console.log(JSON.stringify(jsonStr));
+    const js = jsonStr.split(",");
+    js.forEach((e) => {
+        console.log(e);
+    });
     return {
         apiKey: json["apiKey"],
         authDomain: json["authDomain"],
