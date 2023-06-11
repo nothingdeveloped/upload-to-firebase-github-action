@@ -37,6 +37,7 @@ function getFirebaseConfig(jsonStr): FireBaseConfigType {
   if (jsonStr.trim() == "") core.setFailed("FireBase Config is Empty");
   const json = jsonStr
   console.log(JSON.stringify(jsonStr));
+  console.log(jsonStr);
   // console.log(Object.keys(json).map((e)=> console.log(e)))
   // console.log(Object.keys(json))
   // return jsonStr
