@@ -19432,8 +19432,8 @@ function getInputs() {
 exports.getInputs = getInputs;
 function getFirebaseConfig(jsonStr) {
     // if (jsonStr.trim() == "") core.setFailed("FireBase Config is Empty");
-    const json = jsonStr;
-    console.log(jsonStr);
+    const json = JSON.parse(JSON.stringify(jsonStr));
+    console.log(json);
     // return jsonStr
     return {
         apiKey: json["apiKey"],
