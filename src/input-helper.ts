@@ -35,12 +35,8 @@ export function getInputs(): UploadInputs {
 
 function getFirebaseConfig(jsonStr): FireBaseConfigType {
   if (jsonStr.trim() == "") core.setFailed("FireBase Config is Empty");
-  const json = jsonStr
+  const json = JSON.parse(JSON.stringify(jsonStr))
   console.log(JSON.stringify(jsonStr));
-  console.log(jsonStr);
-  // console.log(Object.keys(json).map((e)=> console.log(e)))
-  // console.log(Object.keys(json))
-  // return jsonStr
   return {
     apiKey: json["apiKey"],
     authDomain: json["authDomain"],
