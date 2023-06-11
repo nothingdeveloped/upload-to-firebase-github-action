@@ -19433,11 +19433,13 @@ exports.getInputs = getInputs;
 function getFirebaseConfig(jsonStr) {
     if (jsonStr.trim() == "")
         core.setFailed("FireBase Config is Empty");
-    const json = JSON.parse(JSON.stringify(jsonStr));
+    // const json = JSON.parse(JSON.stringify(jsonStr))
     console.log(JSON.stringify(jsonStr));
+    const json = {};
     const js = jsonStr.split(",");
     js.forEach((e) => {
-        console.log(e);
+        const val = e.split(":");
+        json[val[0]] = val[1];
     });
     return {
         apiKey: json["apiKey"],
