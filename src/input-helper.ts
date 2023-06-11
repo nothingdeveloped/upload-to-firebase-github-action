@@ -42,7 +42,7 @@ function getFirebaseConfig(jsonStr): FireBaseConfigType {
   const js : string[]= jsonStr.split(",")
   js.forEach((e)=>{
     const val = e.split(":")
-    json[val[0].replace("\"","").replace("\"","")] = val[1]
+    json[val[0].replace("\"","").replace("\"","").replace("\n","").replace("***","")] = val[1].replace("\"","").replace("\"","").replace("\n","").replace("***","")
   })
 
   console.log(json)
