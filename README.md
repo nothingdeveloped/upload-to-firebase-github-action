@@ -1,13 +1,7 @@
 ### What it does
- Uploads a file to firebase cloud storage and trigger a webhook.
+ Uploads a file to firebase cloud storage and triggers a webhook.
 
-**Table of Contents**
-
-[TOCM]
-
-[TOC]
-
-#Installation
+# Installation
 **Using the actions in workflow**
 ```yaml
     - uses: nothingdeveloped/upload-to-firebase-github-action@master 
@@ -34,7 +28,6 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: '12.x'
-    
     - name: Cache Flutter dependencies
       uses: actions/cache@v1
       with:
@@ -46,13 +39,11 @@ jobs:
         flutter-version: '3.7.10' 
     - run: flutter pub get
     - run: flutter build apk
-	
     - uses: actions/upload-artifact@v3
       with:
         name: release-apk
         path: build/app/outputs/apk/release/app-release.apk
         retention-days: 1
-		
     - uses: nothingdeveloped/upload-to-firebase-github-action@master 
       with:
        firebase_metadata: '{ "Content-Type": "application/zip" }'
@@ -60,13 +51,13 @@ jobs:
        firebase_config: '{{SECRETS.FIREBASE_CONFIG}}'
 ```
 
-#Configuration
+# Configuration
 First, Configure the firebase config in the secrets to avoid exposing credentials (firebase config keys) in code base.
 1. Goto [firebase console](https://console.firebase.google.com/ "firebase console")
 2. Select the project and goto Project Settings -> General -> Scroll to "Your App" -> In "SDK setup and configuration" section select config and copy the code.
 3. Create a secret in Github and paste the config.
 
-**Sample : **
+** Sample : ** \
 In FireBase Console: 
 
 ![](https://nothingdeveloped.github.io/assets/firebase_config.png)
@@ -76,9 +67,9 @@ In Github:
 ![](https://nothingdeveloped.github.io/assets/github_action_secret.png)
 
 
-#Options
+# Options
 - **FireBase Config** (required) : 
-     ```javascript
+ ```javascript
 apiKey: string;
 authDomain: string;
 projectId: string;
@@ -88,25 +79,24 @@ appId: string;
 measurementId: string;
 path: string;
 ```
-1-7 -> Others are default firebase config 
-8 -> path : Path to upload the firebase cloud storage
+&emsp;path : Path to upload the firebase cloud storage \
+&emsp;Others are default firebase config 
 
 ![](https://nothingdeveloped.github.io/assets/firebase_cloud_storage.png)
 
-
-- **FireBase MetaData **(optional)
+- **FireBase MetaData** (optional) :
 ```javascript
   contentType: string;
 ```
-1.contentType : Content Tye for uploaded file . Default : 'application/zip'
+&emsp;contentType : Content Type for file to be uploaded. Default : 'application/zip'
 
-- ** FileForm** (required)
+- **FileForm** (required):
 ```javascript
   file: string;
 ```
-1.file : File path of the file to be uploaded ( file path in the artifact )
+&emsp;file : Path of the file to be uploaded ( file path in the artifact )
 
-- **Webhook** (optional)
+- **Webhook** (optional):
 ```javascript
   url: string (GET,PUT,POST,DELETE);
   method: string;
@@ -114,11 +104,11 @@ path: string;
   secret_name: string;
   data: {};
 ```
-url : Url of the website
-method : Http Method
-secret : Webhook secret to verify request is made from this action . default : sha256 of url
-secret_name : Name of webhook secret key . default : secret_key
-data : Additional data that can be passed.
+&emsp;url : Url of the website \
+&emsp;method : Http Method \
+&emsp;secret : Webhook secret to verify request is made from this action . default : sha256 of url \
+&emsp;secret_name : Name of webhook secret key . default : secret_key \
+&emsp;data : Additional data that can be passed. 
 
 
 
