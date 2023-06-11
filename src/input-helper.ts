@@ -21,6 +21,8 @@ export function getInputs(): UploadInputs {
   const fileForm = getfileForm(core.getInput(Inputs.FILEFORM));
   const webhook = getwebhook(core.getInput(Inputs.WEBHOOK));
 
+  console.log(firebaseConfig);
+
   const inputs = {
     firebaseConfig: firebaseConfig,
     fireBaseMetadata: fireBaseMetadata,
@@ -33,7 +35,8 @@ export function getInputs(): UploadInputs {
 
 function getFirebaseConfig(jsonStr): FireBaseConfigType {
   // if (jsonStr.trim() == "") core.setFailed("FireBase Config is Empty");
-  const json = jsonStr
+  const json = jsonStr;
+  console.log(jsonStr);
   return {
     apiKey: json["apiKey"],
     authDomain: json["authDomain"],

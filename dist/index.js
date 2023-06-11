@@ -19420,6 +19420,7 @@ function getInputs() {
     const fireBaseMetadata = getfireBaseMetadata(core.getInput(constants_1.Inputs.FIREBASE_METADATA));
     const fileForm = getfileForm(core.getInput(constants_1.Inputs.FILEFORM));
     const webhook = getwebhook(core.getInput(constants_1.Inputs.WEBHOOK));
+    console.log(firebaseConfig);
     const inputs = {
         firebaseConfig: firebaseConfig,
         fireBaseMetadata: fireBaseMetadata,
@@ -19432,6 +19433,7 @@ exports.getInputs = getInputs;
 function getFirebaseConfig(jsonStr) {
     // if (jsonStr.trim() == "") core.setFailed("FireBase Config is Empty");
     const json = jsonStr;
+    console.log(jsonStr);
     return {
         apiKey: json["apiKey"],
         authDomain: json["authDomain"],
